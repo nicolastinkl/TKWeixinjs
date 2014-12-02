@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html  style="width: 100%;height: 100%">
+<head>
+    <meta charset="utf-8">
+    <title>智能FUN</title>
+    <link rel="icon" type="image/GIF" href="res/favicon.ico"/>
+    <link href="style.css" rel="stylesheet" type="text/css"/>
+    <meta name="apple-mobile-web-app-capable" content="yes"/>
+    <meta name="full-screen" content="yes"/>
+    <meta name="screen-orientation" content="portrait"/>
+    <meta name="viewport" content="target-densitydpi=high-dpi,width=device-width"/>
+    <meta name="x5-fullscreen" content="true"/>
+    <meta http-equiv="Access-Control-Allow-Origin" content="*"/>
+    <meta name="360-fullscreen" content="true"/>
+
+    <script src="https://cn.avoscloud.com/scripts/lib/av-0.4.1.min.js"></script>
+
+    <style>
+        body{
+            width: 100%;
+            margin: 0px;
+            padding: 0px;
+            height: 100%;
+        }
+        body, canvas, div {
+            -moz-user-select: none;
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            -khtml-user-select: none;
+            /*-webkit-tap-highlight-color: rgba(0, 0, 0, 0);*/
+        }
+
+
+
+        .register-con-form{ display: inline; margin:0px 0 0 0px; width: 100%; padding-bottom: 20px; }
+        .register-con-form li{  height: 70px; width: 100%;}
+
+        .input-text-style-3{  padding-left:10px; padding-right:10px;}
+        .input-checkbox-style-3{  margin: 4px 5px 0 0;}
+
+
+        /*公共样式*/
+        .input-text-style-3{ width: 130px; padding: 11px 0; height: 18px; line-height: 18px; border:1px solid #dcdcdc; border-radius: 3px; font-size: 14px; color: #333; padding-left: 13px;
+            transition-property: border;
+            transition-duration: 0.2s;
+            transition-timing-function: ease;
+        }
+        .input-text-style-3:hover{ border:1px solid #ff9241;
+            transition-property: border;
+            transition-duration: 0.2s;
+            transition-timing-function: ease;
+        }
+        .input-text-style-3:focus{ border:1px solid #e74849;
+            transition-property: border;
+            transition-duration: 0.2s;
+            transition-timing-function: ease;
+        }
+
+        /*提交按钮*/
+        .input-submit-style-3{ width: 190px;background: url("res/confirm.png");
+            width: 126px;
+            height: 36px;
+            background-size: cover;}
+
+        .input-submit-style-3{ cursor: pointer; background:none; background-color: #e43737; border:none; width: 100px; height: 40px; line-height: 40px; text-align: center; color: #fff; font-size: 16px; border-radius: 3px;
+            transition-property: background-color;
+            transition-duration: 0.2s;
+            transition-timing-function: ease;
+        }
+        .input-submit-style-3:hover{background-color: #d23433;
+            transition-property: background-color;
+            transition-duration: 0.2s;
+            transition-timing-function: ease;
+        }
+
+        .rcf-label{  font-size: 16px; width: 80px; line-height: 42px;}
+
+
+
+    </style>
+</head>
+<body style="padding:0; margin: 0;">
+<script>
+//    if(window.navigator.userAgent.indexOf("MicroMessenger") == -1){
+//        window.location.href="http://devcon.cocos.com/";
+//    }
+</script>
+<canvas id="gameCanvas" width="640" height="831"></canvas>
+<div id="regPage" class="regPage tc hide">
+    <div id="alertItem" class="alertArea hide">
+        <div class="alertBorder">
+            <div id="alertText" class="alertText">您的报名信息已经成功提交</div>
+            <div></div>
+            <input type="button" onclick="window.onOkClick()" class="okBtn"/>
+        </div>
+    </div>
+    <div class="regBg regBorder">
+        <img src="res/close.png" class="closeBtn" onclick="window.onCloseClick();">
+        <div class="tc">
+            <img class="logo" src="res/sharelogo.png"/>
+        </div>
+        <form id="registerForm" method="post" target="" action="" class="register-con-form" onsubmit=" return false">
+            <ul class="tc regList">
+                <li>
+                    <div>
+                        <span class="rcf-label">姓名：</span>
+                        <span><input id="realname" class="input-text-style-3" name="realname" placeholder="请输入姓名" type="text"/></span>
+                    </div>
+                </li>
+                <li>
+                    <div>
+
+                        <span class="rcf-label">手机：</span>
+                        <span><input id="telephone" class="input-text-style-3" placeholder="请输入手机号" name="telephone" type="text"/></span>
+                    </div>
+                </li>
+
+            </ul>
+            <input type="hidden" name="from" value="mobile"/>
+
+
+
+            <div class="tc btnArea">
+                <input type="submit" onclick="onSubmitClick()" class="input-submit-style-3" value="提交"/>
+            </div>
+
+        </form>
+
+    </div>
+</div>
+<div class="hide">
+    <audio id="myAudio" loop="true"></audio>
+</div>
+<script src="frameworks/cocos2d-html5/CCBoot.js"></script>
+<script src="main.js"></script>
+<script src="WeixinApi.js"></script>
+<script>
+
+    var _hmt = _hmt || [];
+    (function() {
+        var hm = document.createElement("script");
+        hm.src = "//hm.baidu.com/hm.js?a1b273b6530399b5f4ce60c7e87cb00e";
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(hm, s);
+    })();
+
+    // 微信分享的数据
+    window.wxData = {
+        "appId": "wx3c91c9881ed7d8ef",
+        "imgUrl": "http://tinkl.qiniudn.com/tinklgetheadimg.jpeg",
+        "link": "http://2.gaoduanshenghuo.sinaapp.com",
+        "desc": "当超模爱上互联网，百万营销不如来场聚会",
+        "title": "智能FUN"
+    };
+
+    WeixinApi.ready(function (Api) {
+        // 分享的回调
+        var wxCallbacks = {
+            ready: function () {
+            },
+
+            cancel: function (resp) {
+            },
+            fail: function (resp) {
+            },
+            confirm: function (resp) {
+            },
+            all: function (resp) {
+            }
+        };
+        Api.shareToFriend(wxData, wxCallbacks);
+        Api.shareToTimeline(wxData, wxCallbacks);
+        Api.shareToWeibo(wxData, wxCallbacks);
+    });
+</script>
+</body>
+</html>
